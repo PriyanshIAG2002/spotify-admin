@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { promises as fs } from 'node:fs'
-import { basename, extname, join } from 'node:path'
+import { extname, join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { defineConfig } from 'vite'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
@@ -8,8 +8,7 @@ import babel from '@rolldown/plugin-babel'
 import tailwindcss from '@tailwindcss/vite'
 
 const TEMP_IMAGE_CACHE_DIR = join(tmpdir(), 'spotifyadmin-temp-images')
-const TEMP_IMAGE_ROUTE = '/__temp-image'
-const TEMP_FILE_ROUTE = '/__temp-images/'
+const TEMP_IMAGE_ROUTE = '/api/temp-image'
 
 const contentTypeByExtension = {
   '.avif': 'image/avif',
@@ -102,32 +101,15 @@ const registerTempImageProxy = (server) => {
         }
 
         const cachedPath = await ensureTempImageOnDisk(remoteUrl.toString())
-        const publicPath = `${TEMP_FILE_ROUTE}${basename(cachedPath)}`
-
-        res.statusCode = 200
-        res.setHeader('Content-Type', 'application/json')
-        res.end(JSON.stringify({ publicPath, cachedPath }))
-        return
-      }
-
-      if (requestUrl.pathname.startsWith(TEMP_FILE_ROUTE)) {
-        const fileName = requestUrl.pathname.slice(TEMP_FILE_ROUTE.length)
-        if (!fileName || fileName.includes('..')) {
-          res.statusCode = 400
-          res.end('Invalid image path.')
-          return
-        }
-
-        const absolutePath = join(TEMP_IMAGE_CACHE_DIR, fileName)
-        const fileBuffer = await fs.readFile(absolutePath)
-        const extension = extname(fileName).toLowerCase()
+        const fileBuffer = await fs.readFile(cachedPath)
+        const extension = extname(cachedPath).toLowerCase()
 
         res.statusCode = 200
         res.setHeader(
           'Content-Type',
           contentTypeByExtension[extension] || 'application/octet-stream'
         )
-        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+        res.setHeader('Cache-Control', 'public, max-age=3600')
         res.end(fileBuffer)
         return
       }

@@ -3,7 +3,7 @@ export const buildTempImageProxyLookupUrl = (remoteUrl) => {
     return '';
   }
 
-  return `/__temp-image?url=${encodeURIComponent(remoteUrl)}`;
+  return `/api/temp-image?url=${encodeURIComponent(remoteUrl)}`;
 };
 
 export const fetchTempImagePublicPath = async (remoteUrl) => {
@@ -11,12 +11,5 @@ export const fetchTempImagePublicPath = async (remoteUrl) => {
     return '';
   }
 
-  const response = await fetch(buildTempImageProxyLookupUrl(remoteUrl));
-
-  if (!response.ok) {
-    throw new Error('Failed to prepare local image preview.');
-  }
-
-  const data = await response.json();
-  return data.publicPath || '';
+  return buildTempImageProxyLookupUrl(remoteUrl);
 };

@@ -26,7 +26,6 @@ const ProcessImage = () => {
   const [record, setRecord] = useState(location.state?.record || null);
   const [isRecordLoading, setIsRecordLoading] = useState(!location.state?.record);
   const [previewImageURL, setPreviewImageURL] = useState('');
-  const [previewError, setPreviewError] = useState('');
   const [phase, setPhase] = useState('upload-code');
   const [spotifyCode, setSpotifyCode] = useState(null);
   const [cardCompositeURL, setCardCompositeURL] = useState('');
@@ -93,12 +92,10 @@ const ProcessImage = () => {
 
       const sourceUrl = record.downloadableSourceImageURL || record.originalImageURL;
       if (!sourceUrl) {
-        setPreviewError('No source image was returned for this record.');
         return;
       }
 
       try {
-        setPreviewError('');
         const publicPath = await fetchTempImagePublicPath(sourceUrl);
 
         if (isMounted) {
@@ -106,9 +103,6 @@ const ProcessImage = () => {
         }
       } catch (error) {
         console.error('Preview image cache error:', error);
-        if (isMounted) {
-          setPreviewError('Could not prepare the source image preview.');
-        }
       }
     };
 
