@@ -1,21 +1,32 @@
 import React from 'react';
 
-const OVERLAY_IMAGE_URL = '/overlay2.png';
+const OVERLAY_IMAGE_URL = '/Spotify Polaroid.png';
 
 const imageAreaStyle = {
   position: 'absolute',
-  left: '7.75%',
-  top: '28.2%',
-  width: '84.5%',
-  height: '71.5%',
+  left: '8.4%',
+  top: '25.3%',
+  width: '83.2%',
+  height: '49.8%',
   overflow: 'hidden',
-  border: '3.5px solid #1ed760',
-  borderRadius: '2px',
-  boxShadow: '0 0 20px rgba(30, 215, 96, 0.2)',
+  zIndex: 1,
+};
+
+const codeAreaStyle = {
+  position: 'absolute',
+  left: '0.0%',
+  bottom: '0',
+  width: '100%',
+  height: '24.2%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 20,
 };
 
 const OverlayPreview = ({
   imageUrl,
+  spotifyCode,
   alt = 'Spotify card',
   style,
   scale = 1,
@@ -28,13 +39,13 @@ const OverlayPreview = ({
     style={{
       position: 'relative',
       width: '100%',
-      flex: 1, // Let it fill available space
+      aspectRatio: '2 / 3',
       overflow: 'hidden',
       backgroundColor: '#000',
       ...style,
     }}
   >
-    {/* User Photo Area */}
+    {/* User Photo Area - Behind Overlay */}
     {imageUrl && (
       <div style={{ ...imageAreaStyle, backgroundColor: frameBackground }}>
         <img
@@ -52,11 +63,31 @@ const OverlayPreview = ({
       </div>
     )}
 
+    {/* Overlay Image */}
     <img
       src={OVERLAY_IMAGE_URL}
       alt="Overlay frame"
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block', pointerEvents: 'none' }}
+      style={{ 
+        position: 'absolute', 
+        inset: 0, 
+        width: '100%', 
+        height: '100%', 
+        display: 'block', 
+        pointerEvents: 'none',
+        zIndex: 10 
+      }}
     />
+
+    {/* Spotify Code Area - On Top of Overlay */}
+    {spotifyCode && (
+      <div style={codeAreaStyle}>
+        <img 
+          src={spotifyCode} 
+          alt="Spotify Code" 
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+        />
+      </div>
+    )}
   </div>
 );
 

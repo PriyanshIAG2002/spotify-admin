@@ -269,23 +269,13 @@ const ProcessImage = () => {
                 <p style={panelLabelStyle}>FINAL OVERLAY</p>
                 <div ref={compositeRef} style={overlayPreviewBoxStyle}>
                   {previewImageURL ? (
-                    <>
-                      <OverlayPreview
-                        imageUrl={previewImageURL}
-                        scale={overlayZoom}
-                        offsetX={overlayOffsetX}
-                        offsetY={overlayOffsetY}
-                      />
-                      {spotifyCode && (
-                        <div style={{ width: '100%', backgroundColor: '#000' }}>
-                          <img 
-                            src={spotifyCode} 
-                            alt="Spotify Code Strip" 
-                            style={{ width: '100%', display: 'block' }} 
-                          />
-                        </div>
-                      )}
-                    </>
+                    <OverlayPreview
+                      imageUrl={previewImageURL}
+                      spotifyCode={spotifyCode}
+                      scale={overlayZoom}
+                      offsetX={overlayOffsetX}
+                      offsetY={overlayOffsetY}
+                    />
                   ) : (
                     <div style={previewPlaceholderStyle}>
                       <p style={placeholderTextStyle}>
@@ -301,7 +291,7 @@ const ProcessImage = () => {
                     <input
                       type="range"
                       min="1"
-                      max="1.4"
+                      max="3"
                       step="0.01"
                       value={overlayZoom}
                       onChange={(event) => setOverlayZoom(Number(event.target.value))}
@@ -313,8 +303,8 @@ const ProcessImage = () => {
                     <span style={controlLabelStyle}>Vertical Adjust</span>
                     <input
                       type="range"
-                      min="-14"
-                      max="14"
+                      min="-30"
+                      max="30"
                       step="0.5"
                       value={overlayOffsetY}
                       onChange={(event) => setOverlayOffsetY(Number(event.target.value))}
@@ -326,8 +316,8 @@ const ProcessImage = () => {
                     <span style={controlLabelStyle}>Horizontal Adjust</span>
                     <input
                       type="range"
-                      min="-10"
-                      max="10"
+                      min="-30"
+                      max="30"
                       step="0.5"
                       value={overlayOffsetX}
                       onChange={(event) => setOverlayOffsetX(Number(event.target.value))}
@@ -403,12 +393,11 @@ const overlayPreviewBoxStyle = {
   width: '100%', 
   aspectRatio: '2 / 3',
   backgroundColor: '#000',
-  borderRadius: '0px', // Removed border radius for cleaner print edges
+  borderRadius: '0px', 
   overflow: 'hidden', 
   boxShadow: '0 30px 60px rgba(0,0,0,0.4)', 
   border: '1px solid var(--spotify-border)',
-  display: 'flex',
-  flexDirection: 'column'
+  position: 'relative'
 };
 const previewPlaceholderStyle = { width: '100%', minHeight: '240px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#050505' };
 const placeholderTextStyle = { color: 'var(--spotify-text-sub)', textAlign: 'center', padding: '0 1.5rem' };
