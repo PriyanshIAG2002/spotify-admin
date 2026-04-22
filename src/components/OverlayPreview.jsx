@@ -6,9 +6,12 @@ const imageAreaStyle = {
   position: 'absolute',
   left: '7.75%',
   top: '31.5%',
-  width: '83%',
+  width: '84.5%',
   height: '63.8%',
   overflow: 'hidden',
+  border: '3.5px solid #1ed760',
+  borderRadius: '2px',
+  boxShadow: '0 0 20px rgba(30, 215, 96, 0.2)',
 };
 
 const OverlayPreview = ({
@@ -18,8 +21,8 @@ const OverlayPreview = ({
   scale = 1,
   offsetX = 0,
   offsetY = 0,
-  imageFit = 'contain',
-  frameBackground = '#ffffff',
+  imageFit = 'cover',
+  frameBackground = '#121212',
 }) => (
   <div
     style={{
@@ -31,7 +34,8 @@ const OverlayPreview = ({
       ...style,
     }}
   >
-    {imageUrl ? (
+    {/* User Photo Area */}
+    {imageUrl && (
       <div style={{ ...imageAreaStyle, backgroundColor: frameBackground }}>
         <img
           src={imageUrl}
@@ -46,12 +50,12 @@ const OverlayPreview = ({
           }}
         />
       </div>
-    ) : null}
+    )}
 
     <img
       src={OVERLAY_IMAGE_URL}
       alt="Overlay frame"
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }}
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block', pointerEvents: 'none' }}
     />
   </div>
 );

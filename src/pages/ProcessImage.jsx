@@ -13,7 +13,6 @@ import {
 } from 'react-icons/hi';
 import OverlayPreview from '../components/OverlayPreview';
 import { fetchTempImagePublicPath } from '../lib/imageProxy';
-import { buildCardCompositeDataUrl } from '../lib/imageUtils';
 import { buildOverlayPrintMarkup } from '../lib/overlayPrint';
 import { fetchGalleryRecordByUserId } from '../lib/spotifyApi';
 
@@ -113,35 +112,6 @@ const ProcessImage = () => {
     };
   }, [record]);
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const buildComposite = async () => {
-      if (!previewImageURL || !spotifyCode) {
-        return;
-      }
-
-      try {
-        setCompositeError('');
-        const compositeUrl = await buildCardCompositeDataUrl(previewImageURL, spotifyCode);
-
-        if (isMounted) {
-          setCardCompositeURL(compositeUrl);
-        }
-      } catch (error) {
-        console.error('Composite build error:', error);
-        if (isMounted) {
-          setCompositeError('Could not prepare the card preview.');
-        }
-      }
-    };
-
-    buildComposite();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [previewImageURL, spotifyCode]);
 
   useEffect(() => {
     let isMounted = true;
@@ -217,7 +187,7 @@ const ProcessImage = () => {
   };
 
   const handleSubmit = async () => {
-    if (!compositeRef.current || !record || !cardCompositeURL) return;
+    if (!compositeRef.current || !record || !previewImageURL || !spotifyCode) return;
     setIsProcessing(true);
 
     try {
@@ -298,13 +268,24 @@ const ProcessImage = () => {
               <div style={previewCol}>
                 <p style={panelLabelStyle}>FINAL OVERLAY</p>
                 <div ref={compositeRef} style={overlayPreviewBoxStyle}>
-                  {cardCompositeURL ? (
-                    <OverlayPreview
-                      imageUrl={cardCompositeURL}
-                      scale={overlayZoom}
-                      offsetX={overlayOffsetX}
-                      offsetY={overlayOffsetY}
-                    />
+                  {previewImageURL ? (
+                    <>
+                      <OverlayPreview
+                        imageUrl={previewImageURL}
+                        scale={overlayZoom}
+                        offsetX={overlayOffsetX}
+                        offsetY={overlayOffsetY}
+                      />
+                      {spotifyCode && (
+                        <div style={{ width: '100%', backgroundColor: '#000' }}>
+                          <img 
+                            src={spotifyCode} 
+                            alt="Spotify Code Strip" 
+                            style={{ width: '100%', display: 'block' }} 
+                          />
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <div style={previewPlaceholderStyle}>
                       <p style={placeholderTextStyle}>
@@ -357,7 +338,7 @@ const ProcessImage = () => {
 
                 <button
                   onClick={handleSubmit}
-                  disabled={isProcessing || !cardCompositeURL}
+                  disabled={isProcessing || !previewImageURL || !spotifyCode}
                   style={primaryBtnStyle}
                 >
                   {isProcessing ? 'GENERATING...' : 'SUBMIT IMAGE'}
@@ -418,7 +399,16 @@ const adjustLayout = { display: 'flex', justifyContent: 'center', width: '100%' 
 const singlePreviewLayoutStyle = { width: '100%', maxWidth: '420px' };
 const previewCol = { width: '100%', maxWidth: '420px' };
 const panelLabelStyle = { fontSize: '0.78rem', fontWeight: '800', letterSpacing: '1.4px', color: 'var(--spotify-text-muted)', marginBottom: '0.85rem' };
-const overlayPreviewBoxStyle = { width: '100%', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 30px 60px rgba(0,0,0,0.4)', border: '1px solid var(--spotify-border)' };
+const overlayPreviewBoxStyle = { 
+  width: '100%', 
+  backgroundColor: '#000',
+  borderRadius: '14px', 
+  overflow: 'hidden', 
+  boxShadow: '0 30px 60px rgba(0,0,0,0.4)', 
+  border: '1px solid var(--spotify-border)',
+  display: 'flex',
+  flexDirection: 'column'
+};
 const previewPlaceholderStyle = { width: '100%', minHeight: '240px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#050505' };
 const placeholderTextStyle = { color: 'var(--spotify-text-sub)', textAlign: 'center', padding: '0 1.5rem' };
 const controlsPanelStyle = { marginTop: '1rem', padding: '1rem 1.1rem', backgroundColor: 'var(--spotify-surface)', border: '1px solid var(--spotify-border)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '0.9rem' };
