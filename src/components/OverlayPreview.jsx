@@ -1,27 +1,27 @@
 import React from 'react';
 
-const OVERLAY_IMAGE_URL = '/Spotify Polaroid.png';
+const OVERLAY_IMAGE_URL = '/final.png';
 
 const imageAreaStyle = {
   position: 'absolute',
-  left: '8.4%',
-  top: '25.3%',
-  width: '83.2%',
-  height: '49.8%',
+  left: '2.2%',
+  top: '20.3%',
+  width: '100%',
+  height: '70.2%',
   overflow: 'hidden',
   zIndex: 1,
 };
 
 const codeAreaStyle = {
   position: 'absolute',
-  left: '0.0%',
-  bottom: '0',
+  left: '0',
+  bottom: '0%',
   width: '100%',
-  height: '24.2%',
+  height: '16.5%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 20,
+  zIndex: 30,
 };
 
 const OverlayPreview = ({
