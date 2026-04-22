@@ -1,13 +1,13 @@
 import React from 'react';
 
-const OVERLAY_IMAGE_URL = '/overlay.png';
+const OVERLAY_IMAGE_URL = '/overlay2.png';
 
 const imageAreaStyle = {
   position: 'absolute',
   left: '7.75%',
-  top: '31.5%',
+  top: '28.2%',
   width: '84.5%',
-  height: '63.8%',
+  height: '71.5%',
   overflow: 'hidden',
   border: '3.5px solid #1ed760',
   borderRadius: '2px',
@@ -28,7 +28,7 @@ const OverlayPreview = ({
     style={{
       position: 'relative',
       width: '100%',
-      aspectRatio: '2 / 3',
+      flex: 1, // Let it fill available space
       overflow: 'hidden',
       backgroundColor: '#000',
       ...style,

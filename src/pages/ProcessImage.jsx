@@ -401,8 +401,9 @@ const previewCol = { width: '100%', maxWidth: '420px' };
 const panelLabelStyle = { fontSize: '0.78rem', fontWeight: '800', letterSpacing: '1.4px', color: 'var(--spotify-text-muted)', marginBottom: '0.85rem' };
 const overlayPreviewBoxStyle = { 
   width: '100%', 
+  aspectRatio: '2 / 3',
   backgroundColor: '#000',
-  borderRadius: '14px', 
+  borderRadius: '0px', // Removed border radius for cleaner print edges
   overflow: 'hidden', 
   boxShadow: '0 30px 60px rgba(0,0,0,0.4)', 
   border: '1px solid var(--spotify-border)',
